@@ -1,0 +1,61 @@
+#include<stdio.h>
+
+struct Process {
+    int processID;   
+    int arrivalTime;  
+    int burstTime;   
+    int completionTime;
+};
+
+
+void fcfsScheduling(struct Process processes[], int n) {
+ 
+    int currentTime = 0;
+    for (int i = 0; i < n; i++) {
+        // If the process arrives later than the current time, wait for it to arrive
+        if (processes[i].arrivalTime > currentTime) {
+            currentTime = processes[i].arrivalTime;
+        }
+
+        processes[i].completionTime = currentTime + processes[i].burstTime;
+
+        currentTime = processes[i].completionTime;
+    }
+}
+
+void displayResults(struct Process processes[], int n) {
+    printf("Process\t Arrival Time\t Burst Time\t Completion Time\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("%d\t %d\t\t %d\t\t %d\n",
+               processes[i].processID,
+               processes[i].arrivalTime,
+               processes[i].burstTime,
+               processes[i].completionTime);
+    }
+}
+
+int main() {
+
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+  
+    struct Process processes[n];
+
+    for (int i = 0; i < n; i++) {
+        processes[i].processID = i + 1;
+        printf("Enter arrival time for Process %d: ", i + 1);
+        scanf("%d", &processes[i].arrivalTime);
+        printf("Enter burst time for Process %d: ", i + 1);
+        scanf("%d", &processes[i].burstTime);
+    }
+
+
+    fcfsScheduling(processes, n);
+
+    displayResults(processes, n);
+
+    return 0;
+}
